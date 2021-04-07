@@ -12,6 +12,7 @@
     <div class='page_content'>
         <?= $content ?>
     </div>
+    <script src="<?= BASE_URL ?>/public/js/page.home.js"></script>
 </body>
 
 </html>

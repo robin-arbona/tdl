@@ -32,18 +32,19 @@ class Controller
         exit();
     }
 
-    public function renderHtml($data, $view, $buffer = false)
+    public function renderHtml($data, $viewPath, $buffer = false, $response_code = 200)
     {
         if (is_array($data) && !empty($data)) {
             extract($data);
         }
         ob_start();
-        require(dirname(dirname(__FILE__)) . "/view/$view");
+        require(dirname(dirname(__FILE__)) . "/view/$viewPath");
         $content = ob_get_clean();
 
         if ($buffer) {
             return $content;
         } else {
+            http_response_code($response_code);
             echo $content;
             exit();
         }

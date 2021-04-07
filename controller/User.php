@@ -16,7 +16,7 @@ class User extends Controller
         $this->model = new Model;
     }
 
-    public function new()
+    public function add()
     {
         $errors = [];
         foreach ($_POST as $key => $value) {
@@ -55,6 +55,7 @@ class User extends Controller
         }
         if ($user =  $this->model->getBy('login', $_POST["login"], 'Users')) {
             if (password_verify($_POST["password"], $user->password)) {
+                $_SESSION['user'] = $user;
                 $this->renderJson(['msg' => 'Connexion granted'], 201);
             }
         }

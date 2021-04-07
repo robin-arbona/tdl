@@ -1,10 +1,11 @@
-const formPH = document.querySelector('.form')
-const serverMsg = document.querySelector('.server_msg')
-
-let BASE_URL ="/";
+let formPH 
+let serverMsg 
+let BASE_URL
 
 document.addEventListener('DOMContentLoaded',async ()=>{
     BASE_URL = await fetch('base_url').then(reponse=>reponse.text())
+    formPH = document.querySelector('.form')
+    serverMsg = document.querySelector('.server_msg')
     init();
 })
 
@@ -18,12 +19,12 @@ async function loadConnexionForm(){
         e.preventDefault()
         await loadInscriptionForm()
     })
-    handleForm('user/connexion',()=>changePage('Todolist/dashboard'))
+    handleForm('user/connexion',()=>changePage('Task/dashboard'))
 }
 
 async function loadInscriptionForm(){
     formPH.innerHTML = await loadContent('view/component/inscription_form.php')
-    handleForm('user/new',loadConnexionForm)
+    handleForm('user/add',loadConnexionForm)
 }
 
 function handleForm(action,callback){
@@ -54,6 +55,13 @@ async function postContent(url,data){
         body: data
     }).then(response=>response)}
 
-function changePage(page){
-    console.log('yeahhh',page)
+async function changePage(page){
+    const content = await fetch(page).then(response=>response.text())
+    document.querySelector('.page_content').innerHTML = content
+    document.querySelector('script').remove()
+    script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = BASE_URL +'/public/js/page.todolist.js'
+    document.getElementsByTagName("head")[0].appendChild(script);
+
 }
