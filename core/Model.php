@@ -54,11 +54,21 @@ class Model
         }
     }
 
-    public function getAll($table = NULL)
+    /**
+     * Returen a array of object matching to all table, filter available
+     * @param array $filter ['key'=>'value'] : SELECT * FROM table WHERE key = value
+     */
+    public function getAll($filter = [], $table = NULL)
     {
         $table = $table != NULL ? $table : $this->table;
-        $SQL = "SELECT * FROM ?";
-        return $this->preFetchAll($SQL, [$table]);
+        $SQL = "SELECT * FROM $table";
+        if (!empty($filter) && (count($filter) == 1)) {
+            $key = implode('', array_keys($filter));
+            $SQL .= ' WHERE ' . $key . ' = ?';
+        } elseif (!empty($filter) && (count($filter) != 1)) {
+            return false;
+        }
+        return $this->preFetchAll($SQL, $filter);
     }
 
     public function getBy($key, $value, $table = NULL)

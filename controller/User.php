@@ -9,8 +9,6 @@ use Exception;
 
 class User extends Controller
 {
-    protected $model;
-
     public function __construct()
     {
         $this->model = new Model;
@@ -38,7 +36,7 @@ class User extends Controller
             }
         }
         try {
-            if (empty($errors) && $this->model->add($_POST, 'Users')) {
+            if (empty($errors) && $this->model->add($_POST, 'User')) {
                 $this->renderJson(['msg' => 'Your inscription is a success'], 201);
             } else {
                 $this->renderJson(['msg' => implode('. ', $errors)]);
@@ -53,7 +51,7 @@ class User extends Controller
         if (!isset($_POST["login"]) || !isset($_POST["password"]) || empty($_POST['login']) || empty($_POST['password'])) {
             $this->renderJson(['msg' => 'Please fullfill your login & password'], 200);
         }
-        if ($user =  $this->model->getBy('login', $_POST["login"], 'Users')) {
+        if ($user =  $this->model->getBy('login', $_POST["login"], 'User')) {
             if (password_verify($_POST["password"], $user->password)) {
                 $_SESSION['user'] = $user;
                 $this->renderJson(['msg' => 'Connexion granted'], 201);

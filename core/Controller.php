@@ -8,23 +8,21 @@ class Controller
 {
     protected $name;
     protected $table;
+    protected $model;
 
     public function __construct()
     {
+        $this->model = new Model();
         $this->name = str_replace('controller\\', '', strtolower(get_class($this)));
-        $this->table = $this->name . 's';
     }
 
-    public function renderJson($data, $response_code = NULL)
+    public function renderJson($data, $response_code = 200)
     {
         ob_clean();
 
         header_remove();
         header("Content-type: application/json; charset=utf-8");
 
-        $success = !empty($data) ? true : false;
-        $response_code = (($response_code == NULL) && ($success)) ? 200 : $response_code;
-        $response_code = (($response_code == NULL) && (!$success)) ? 500 : $response_code;
         http_response_code($response_code);
 
         echo json_encode($data);
