@@ -17,21 +17,59 @@ class Task extends Controller
 
     public function dashboard()
     {
-        if (!isset($_SESSION['user'])) {
-            $this->renderHtml(NULL, 'page/denied.php', false, 403);
-        }
-        $user = $_SESSION['user'];
+        $user = $this->checkUserSession();
 
-        $tasksDone = $this->model->getTasksDone($user->id);
-        $component__task_done_list = $this->renderHtml(compact('tasksDone'), 'component/task_done_list.php', true);
+        $component__task_done_list = $this->done(true);
 
-        $tasksToDo = $this->model->getTasksToDo($user->id);
-        $component__task_todo_list = $this->renderHtml(compact('tasksToDo'), 'component/task_todo_list.php', true);
+        $component__task_todo_list = $this->todo(true);
 
-        $component__task_add_form = $this->renderHtml(NULL, 'component/task_add_form.php', true);
+        $component__task_add_form = $this->addForm(true);
 
         $content = $this->renderHtml(compact('component__task_done_list', 'component__task_todo_list', 'component__task_add_form'), 'page/todolist.php', 'true');
 
         $this->renderHtml(compact('content'), 'template/user.php', false, 200);
+    }
+
+    public function done($buffer = false)
+    {
+        $user = $this->checkUserSession();
+
+        $tasksDone = $this->model->getTasksDone($user->id);
+        return $this->renderHtml(compact('tasksDone'), 'component/task_done_list.php', $buffer);
+    }
+
+    public function todo($buffer = false)
+    {
+        $user = $this->checkUserSession();
+
+        $tasksToDo = $this->model->getTasksToDo($user->id);
+        return $this->renderHtml(compact('tasksToDo'), 'component/task_todo_list.php', $buffer);
+    }
+
+    public function addForm($buffer = false)
+    {
+        $user = $this->checkUserSession();
+
+        return $this->renderHtml(compact('user'), 'component/task_add_form.php', $buffer);
+    }
+
+    public function add()
+    {
+    }
+
+    public function update()
+    {
+    }
+
+    public function remove()
+    {
+    }
+
+    public function checkUserSession()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->renderHtml(NULL, 'page/denied.php', false, 403);
+        }
+        return $_SESSION['user'];
     }
 }

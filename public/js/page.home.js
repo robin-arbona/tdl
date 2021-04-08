@@ -19,7 +19,7 @@ async function loadConnexionForm(){
         e.preventDefault()
         await loadInscriptionForm()
     })
-    handleForm('user/connexion',()=>changePage('Task/dashboard'))
+    handleForm('user/connexion',()=>changePage('Task/dashboard','todolist'))
 }
 
 async function loadInscriptionForm(){
@@ -55,13 +55,13 @@ async function postContent(url,data){
         body: data
     }).then(response=>response)}
 
-async function changePage(page){
+async function changePage(page,scriptName){
     const content = await fetch(page).then(response=>response.text())
     document.querySelector('.page_content').innerHTML = content
     document.querySelector('script').remove()
     script = document.createElement('script')
     script.type = 'text/javascript'
-    script.src = BASE_URL +'/public/js/page.todolist.js'
+    script.src = BASE_URL +'/public/js/page.'+scriptName+'.js'
     document.getElementsByTagName("head")[0].appendChild(script);
 
 }
