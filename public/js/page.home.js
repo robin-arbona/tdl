@@ -62,6 +62,6 @@ async function changePage(page,scriptName){
     script = document.createElement('script')
     script.type = 'text/javascript'
     script.src = BASE_URL +'/public/js/page.'+scriptName+'.js'
-    document.getElementsByTagName("head")[0].appendChild(script);
+    document.querySelector(".script").appendChild(script);
 
 }

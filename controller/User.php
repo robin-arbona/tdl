@@ -16,34 +16,9 @@ class User extends Controller
 
     public function add()
     {
-        $errors = [];
-        foreach ($_POST as $key => $value) {
+        $this->checkPostRequest();
 
-            $method = 'verify' . ucfirst($key);
-            if (method_exists($this, $method)) {
-                if (($msg = $this->$method($value)) === TRUE) {
-                    continue;
-                }
-            }
-
-            if (empty($value)) {
-                $msg = ucfirst($key) . " is empty, please fill it";
-            }
-
-            if (isset($msg) && ($msg != 1)) {
-                $errors[] = $msg;
-                unset($msg);
-            }
-        }
-        try {
-            if (empty($errors) && $this->model->add($_POST, 'User')) {
-                $this->renderJson(['msg' => 'Your inscription is a success'], 201);
-            } else {
-                $this->renderJson(['msg' => implode('. ', $errors)]);
-            }
-        } catch (Exception $e) {
-            $this->renderJson(['msg' => $e->getMessage()], 500);
-        }
+        $this->bddRequestAndRenderJson($this->model->add($_POST, 'User'), 'Your inscription is a success');
     }
 
     public function connexion()
@@ -58,6 +33,12 @@ class User extends Controller
             }
         }
         $this->renderJson(['msg' => 'Connexion failed. Login or password incorrect'], 401);
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        header("Location: " . BASE_URL);
     }
 
     public function verifyEmail(string $mail)

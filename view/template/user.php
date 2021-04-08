@@ -12,7 +12,8 @@
     <div class='page_content'>
         <?= $content ?>
     </div>
-
+    <div class="script">
+    </div>
 </body>
 
 </html>

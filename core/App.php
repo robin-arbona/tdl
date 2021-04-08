@@ -59,7 +59,7 @@ class App
                         $controller->$method($parameters);
                         return;
                     } catch (\Exception $e) {
-                        $controller->renderJson(['code' => $e->getCode(), 'message' => $e->getMessage(), 'file' => $e->getFile(), 'ligne' => $e->getLine()]);
+                        $controller->renderJson(['code' => $e->getCode(), 'msg' => $e->getMessage(), 'file' => $e->getFile(), 'ligne' => $e->getLine()]);
                     }
                 }
             }

@@ -3,6 +3,7 @@
 namespace controller;
 
 use core\Controller;
+use Exception;
 use model\TaskModel;
 
 class Task extends Controller
@@ -55,10 +56,25 @@ class Task extends Controller
 
     public function add()
     {
+        $user = $this->checkUserSession();
+        $errors = [];
+        $_POST["creator_login"] = $user->login;
+
+        $this->checkPostRequest();
+
+        $this->bddRequestAndRenderJson($this->model->add($_POST, 'Task'), 'Task successfully added');
     }
 
-    public function update()
+
+    public function update($param)
     {
+        $user = $this->checkUserSession();
+
+        var_dump($param);
+
+        var_dump($_POST);
+
+        exit();
     }
 
     public function remove()

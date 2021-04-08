@@ -3,6 +3,7 @@
 namespace core;
 
 use core\Model;
+use Exception;
 
 class Controller
 {
@@ -45,6 +46,41 @@ class Controller
             http_response_code($response_code);
             echo $content;
             exit();
+        }
+    }
+
+    public function checkPostRequest()
+    {
+        $errors = [];
+        foreach ($_POST as $key => $value) {
+
+            $method = 'verify' . ucfirst($key);
+            if (method_exists($this, $method)) {
+                if (($msg = $this->$method($value)) === TRUE) {
+                    continue;
+                }
+            }
+
+            if (empty($value)) {
+                $msg = ucfirst($key) . " is empty, please fill it.";
+            }
+
+            if (isset($msg) && ($msg != 1)) {
+                $errors[] = $msg;
+                unset($msg);
+            }
+        }
+
+        if (!empty($errors))
+            $this->renderJson(['msg' => implode(" ", $errors)], 200);
+    }
+
+    public function bddRequestAndRenderJson($request, $succesMsg = 'Success')
+    {
+        try {
+            $this->renderJson(['msg' => $succesMsg], 201);
+        } catch (Exception $e) {
+            $this->renderJson(['msg' => $e->getMessage()], 500);
         }
     }
 }

@@ -1,6 +1,7 @@
+<h2>Add form</h2>
 <form class="task_add" action="Task/add" method="post">
     <input type="text" name="name" placeholder="Task name">
-    <select name="owner" placeholder="who's job">
+    <select name="owner_id" placeholder="who's job">
         <option value="<?= $user->id ?>">Me</option>
     </select>
     <textarea name="description" id="" cols="30" rows="5" placeholder="Task description"></textarea>
