@@ -57,7 +57,7 @@ class Task extends Controller
     public function add()
     {
         $user = $this->checkUserSession();
-        $errors = [];
+
         $_POST["creator_login"] = $user->login;
 
         $this->checkPostRequest();
@@ -70,11 +70,20 @@ class Task extends Controller
     {
         $user = $this->checkUserSession();
 
-        var_dump($param);
+        $this->checkPostRequest();
 
-        var_dump($_POST);
+        $errors = [];
 
-        exit();
+        if ($param == "changeState") {
+            $task = (array) $this->model->getBy('id', (int) $_POST["task"], 'Task');
+            if ($user->id == $task["owner_id"]) {
+                $task["done"] = $task["done"] == 0 ? 1 : 0;
+                $this->bddRequestAndRenderJson($this->model->update($task, 'Task'), 'Task successfully updated');
+            } else {
+                $errors[] = 'You can\'t change state of task if your not the owner';
+                $this->renderJson(['msg' => implode(" ", $errors)], 200);
+            }
+        }
     }
 
     public function remove()

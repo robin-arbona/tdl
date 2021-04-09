@@ -30,8 +30,8 @@ let initTodoList= ()=>{
                     await refreshComponent('Task/done',doneList)
                     initTask()
                 } 
-                let jsonContent = await response.text()
-                displayMessage(jsonContent)
+                let jsonContent = await response.json()
+                displayMessage(jsonContent.msg)
             }) 
         });
     }

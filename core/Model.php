@@ -37,6 +37,17 @@ class Model
         return $this->prepare($SQL, $data);
     }
 
+    public function update(array $data, $table = NULL)
+    {
+        $table = $table != NULL ? $table : $this->table;
+        $SQL = "UPDATE $table SET ";
+        $lastKey = array_key_last($data);
+        foreach ($data as $key => $value) {
+            $SQL .= $key == $lastKey ? "$key=? WHERE id={$data['id']} " : "$key=?, ";
+        }
+        return $this->prepare($SQL, $data);
+    }
+
     public function prepare(string $SQL, array $data)
     {
         $sth = $this->db->prepare($SQL);
