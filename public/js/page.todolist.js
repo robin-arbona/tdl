@@ -11,9 +11,7 @@ let initTodoList= ()=>{
     async function init(){
 
         BASE_URL = await fetch('base_url').then(reponse=>reponse.text())
-
         initTask()
-
         initAddTaskButton()
         
     }
@@ -23,15 +21,7 @@ let initTodoList= ()=>{
         tasks.forEach(task => { 
             task.addEventListener('click',async function(e){
                 e.preventDefault()
-                let form = new FormData(this.parentElement)
-                let response = await post('Task/update/changeState',form)
-                if(response.status==201){
-                    await refreshComponent('Task/todo',todolist)
-                    await refreshComponent('Task/done',doneList)
-                    initTask()
-                } 
-                let jsonContent = await response.json()
-                displayMessage(jsonContent.msg)
+                postAndRefresh(this.parentElement,'Task/update/changeState')
             }) 
         });
     }
@@ -40,16 +30,19 @@ let initTodoList= ()=>{
         addBtn = document.querySelector('.task_add > input[type=submit]')
         addBtn.addEventListener('click',async (e)=>{
             e.preventDefault()
-            let taskAddForm = new FormData(addForm)
-            let response = await post('Task/add',taskAddForm)
-            if(response.status==201){
-                await refreshComponent('Task/todo',todolist)
-                await refreshComponent('Task/done',doneList)
-                initTask()
-            } 
-            let jsonContent = await response.json()
-            displayMessage(jsonContent.msg)
+            postAndRefresh(addForm,'Task/add')
         })
+    }
+
+    async function postAndRefresh(formElement,action){
+        let response = await post(action,new FormData(formElement))
+        if(response.status==201){
+            await refreshComponent('Task/todo',todolist)
+            await refreshComponent('Task/done',doneList)
+            initTask()
+        } 
+        let jsonContent = await response.json()
+        displayMessage(jsonContent.msg)
     }
 
     async function refreshComponent($url,$component){
