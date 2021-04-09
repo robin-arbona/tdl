@@ -32,11 +32,15 @@ function handleForm(action,callback){
         e.preventDefault();
         data = new FormData(document.querySelector('form'))
         const response = await postContent(action,data)
+        let jsonContent = await response.json()
+        let msg = jsonContent.msg
         if(response.status == 201){
             callback()
-        } 
-        jsonContent = await response.json()
-        displayMessage(jsonContent.msg)
+            msg='<div class="notification is-success"><button class="delete"></button>'+msg+'</div>'
+        } else {
+            msg='<div class="notification is-warning"><button class="delete"></button>'+msg+'</div>'
+        }
+        displayMessage(msg)
     })
 }
 

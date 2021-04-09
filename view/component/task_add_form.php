@@ -1,5 +1,5 @@
-<h2>Add form</h2>
 <form class="task_add" action="Task/add" method="post">
+    <h3 class="title">Add form</h3>
     <input type="text" name="name" placeholder="Task name">
     <select name="owner_id" placeholder="who's job">
         <option value="<?= $user->id ?>">Me</option>

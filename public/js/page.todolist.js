@@ -36,13 +36,17 @@ let initTodoList= ()=>{
 
     async function postAndRefresh(formElement,action){
         let response = await post(action,new FormData(formElement))
+        let jsonContent = await response.json()
+        let msg = jsonContent.msg
         if(response.status==201){
             await refreshComponent('Task/todo',todolist)
             await refreshComponent('Task/done',doneList)
             initTask()
-        } 
-        let jsonContent = await response.json()
-        displayMessage(jsonContent.msg)
+            msg='<div class="notification is-success"><button class="delete"></button>'+msg+'</div>'
+        } else {
+            msg='<div class="notification is-warning"><button class="delete"></button>'+msg+'</div>'
+        }
+        displayMessage(msg)
     }
 
     async function refreshComponent($url,$component){
@@ -50,7 +54,7 @@ let initTodoList= ()=>{
     }
 
     function displayMessage($msg){
-        serverMsg.innerHTML = $msg;
+        serverMsg.innerHTML = $msg + serverMsg.innerHTML;
     }
 
     async function get(url){
