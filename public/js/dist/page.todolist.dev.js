@@ -21,14 +21,20 @@ var initTodoList = function initTodoList() {
           case 2:
             BASE_URL = _context.sent;
             initTask();
-            initAddTaskButton();
+            initSubmitAddTaskButton();
+            initShowModal();
 
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }
       }
     });
+  }
+
+  function initShowModal() {
+    document.querySelector('.button-add').addEventListener('click', modalShow);
+    document.querySelector('.modal-background').addEventListener('click', modalHide);
   }
 
   function initTask() {
@@ -52,8 +58,8 @@ var initTodoList = function initTodoList() {
     });
   }
 
-  function initAddTaskButton() {
-    addBtn = document.querySelector('.task_add > input[type=submit]');
+  function initSubmitAddTaskButton() {
+    addBtn = document.querySelector('.task_add  input[type=submit]');
     addBtn.addEventListener('click', function _callee2(e) {
       return regeneratorRuntime.async(function _callee2$(_context3) {
         while (1) {
@@ -90,7 +96,7 @@ var initTodoList = function initTodoList() {
             msg = jsonContent.msg;
 
             if (!(response.status == 201)) {
-              _context4.next = 16;
+              _context4.next = 17;
               break;
             }
 
@@ -103,17 +109,18 @@ var initTodoList = function initTodoList() {
 
           case 12:
             initTask();
+            modalHide();
             msg = '<div class="notification is-success"><button class="delete"></button>' + msg + '</div>';
-            _context4.next = 17;
+            _context4.next = 18;
             break;
 
-          case 16:
+          case 17:
             msg = '<div class="notification is-warning"><button class="delete"></button>' + msg + '</div>';
 
-          case 17:
+          case 18:
             displayMessage(msg);
 
-          case 18:
+          case 19:
           case "end":
             return _context4.stop();
         }
@@ -159,6 +166,14 @@ var initTodoList = function initTodoList() {
         }
       }
     });
+  }
+
+  function modalShow() {
+    document.querySelector('.modal').classList.add('is-active');
+  }
+
+  function modalHide() {
+    document.querySelector('.modal').classList.remove('is-active');
   }
 
   function post(url, data) {

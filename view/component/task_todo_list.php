@@ -25,10 +25,10 @@
                         <?= $task->description ?>
                     </td>
                     <td>
-                        <?= $task->start_date ?>
+                        <?= substr($task->start_date, 0, 11) ?>
                     </td>
                     <td>
-                        <?= $task->end_date ?>
+                        <?= substr($task->end_date, 0, 11) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

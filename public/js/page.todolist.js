@@ -12,8 +12,14 @@ let initTodoList= ()=>{
 
         BASE_URL = await fetch('base_url').then(reponse=>reponse.text())
         initTask()
-        initAddTaskButton()
+        initSubmitAddTaskButton()
+        initShowModal()
+    }
+
+    function initShowModal(){
         
+        document.querySelector('.button-add').addEventListener('click',modalShow)
+        document.querySelector('.modal-background').addEventListener('click',modalHide)
     }
 
     function initTask(){
@@ -26,8 +32,8 @@ let initTodoList= ()=>{
         });
     }
 
-    function initAddTaskButton(){
-        addBtn = document.querySelector('.task_add > input[type=submit]')
+    function initSubmitAddTaskButton(){
+        addBtn = document.querySelector('.task_add  input[type=submit]')
         addBtn.addEventListener('click',async (e)=>{
             e.preventDefault()
             postAndRefresh(addForm,'Task/add')
@@ -42,6 +48,7 @@ let initTodoList= ()=>{
             await refreshComponent('Task/todo',todolist)
             await refreshComponent('Task/done',doneList)
             initTask()
+            modalHide()
             msg='<div class="notification is-success"><button class="delete"></button>'+msg+'</div>'
         } else {
             msg='<div class="notification is-warning"><button class="delete"></button>'+msg+'</div>'
@@ -60,6 +67,13 @@ let initTodoList= ()=>{
     async function get(url){
         return fetch(url)
         .then(response=>response.text())
+    }
+
+    function modalShow(){
+        document.querySelector('.modal').classList.add('is-active')
+    }
+    function modalHide(){
+        document.querySelector('.modal').classList.remove('is-active')
     }
 
     async function post(url,data){

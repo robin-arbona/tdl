@@ -67,6 +67,9 @@
                             <a class="button is-light">
                                 Log in
                             </a>
+                            <a href="user/logout" class="button is-light">
+                                Log out
+                            </a>
                         </div>
                     </div>
                 </div>
