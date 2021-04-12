@@ -16,6 +16,7 @@
         <div class="modal-content box" style="border:solid">
             <?= $component__task_add_form ?>
         </div>
+        <button class="modal-close is-large" aria-label="close"></button>
     </div>
 
     <script src="<?= BASE_URL ?>/public/js/page.todolist.js"></script>

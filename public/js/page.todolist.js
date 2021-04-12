@@ -17,6 +17,8 @@ let initTodoList= ()=>{
 
     function initModal(){
         document.querySelector('.modal-background').addEventListener('click',modalHide)
+
+        document.querySelector('.modal-close').addEventListener('click',modalHide)
         
         document.querySelector('.button-add').addEventListener('click',async ()=>{
             await modalShow("Task/addForm")
@@ -77,12 +79,16 @@ let initTodoList= ()=>{
                 let actionRequested = this.getAttribute('value')
                 if(actionRequested == "Save"){
                     let response = await post('Task/update',form)
-                    console.log(response);
+                    let json = await response.json()
+                    msg='<div class="notification is-success"><button class="delete"></button>'+json.msg+'</div>'
+
                 } else if (actionRequested == "Remove") {
                     let idVal = document.querySelector('.task_update input[name=id]').getAttribute('value') 
                     let response = await get('Task/remove/'+idVal,'json')
                     msg='<div class="notification is-success"><button class="delete"></button>'+response.msg+'</div>'
                 }
+                displayMessage(msg)
+
                 await refreshComponent('Task/todo',todolist)
                 await refreshComponent('Task/done',doneList)
                 //displayMessage(msg)
@@ -142,8 +148,19 @@ let initTodoList= ()=>{
         component.innerHTML = await get($url)
     }
 
-    function displayMessage($msg){
-        serverMsg.innerHTML = $msg ;
+    function initDelete(){
+        let deletebtns = document.querySelectorAll('.delete');
+
+        deletebtns.forEach(btn=>{
+            btn.addEventListener('click',function(){
+                this.parentElement.remove()
+            })
+        })
+    }
+
+    async function displayMessage($msg){
+        serverMsg.innerHTML = await $msg ;
+        initDelete()
     }
 
     async function get(url,type = 'text'){
