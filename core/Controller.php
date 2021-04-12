@@ -52,6 +52,7 @@ class Controller
     public function checkPostRequest()
     {
         $errors = [];
+
         foreach ($_POST as $key => $value) {
 
             $method = 'verify' . ucfirst($key);
@@ -70,7 +71,6 @@ class Controller
                 unset($msg);
             }
         }
-
         if (!empty($errors))
             $this->renderJson(['msg' => implode(" ", $errors)], 200);
     }
@@ -82,5 +82,13 @@ class Controller
         } catch (Exception $e) {
             $this->renderJson(['msg' => $e->getMessage()], 500);
         }
+    }
+
+    public function checkUserSession()
+    {
+        if (!isset($_SESSION['user'])) {
+            $this->renderHtml(NULL, 'page/denied.php', false, 403);
+        }
+        return $_SESSION['user'];
     }
 }

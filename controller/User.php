@@ -23,6 +23,8 @@ class User extends Controller
 
     public function connexion()
     {
+        $this->checkPostRequest();
+
         if (!isset($_POST["login"]) || !isset($_POST["password"]) || empty($_POST['login']) || empty($_POST['password'])) {
             $this->renderJson(['msg' => 'Please fullfill your login & password'], 200);
         }
@@ -39,6 +41,49 @@ class User extends Controller
     {
         session_destroy();
         header("Location: " . BASE_URL);
+    }
+
+    public function update($parameters = NULL)
+    {
+        $user = $this->checkUserSession();
+
+        if (is_string($parameters) && strpos($parameters, 'Privilege')) {
+
+            $id = $_POST['id'];
+            $privilege = is_string($user->privilege) ? unserialize($user->privilege) : $user->privilege;
+            if ($parameters == 'addPrivilege') {
+                $privilege[] = (int) $id;
+            } else if ($parameters == 'removePrivilege') {
+                $privilege = array_diff($privilege,  array($id));
+            }
+
+            $user->privilege = serialize($privilege);
+        }
+        $this->model->update((array) $user, 'User');
+        exit();
+        return $this->bddRequestAndRenderJson('lala', 'Task successfully updated');
+    }
+
+    public function updateForm($buffer = false)
+    {
+        $user = $this->checkUserSession();
+
+        $keyword = isset($_POST["search"]) ? $_POST["search"] : ' ';
+        $results =  $this->search($keyword);
+
+        return $this->renderHtml(compact('user', 'results'), 'component/user_update_form.php', $buffer);
+    }
+
+    public function search($login)
+    {
+        $login = htmlspecialchars($login);
+        if ($login == "" || $login == " ") {
+            return [];
+        } else {
+            $users = $this->model->search($login, 'login', 'User');
+        }
+
+        return $users;
     }
 
     public function verifyEmail(string $mail)

@@ -11,7 +11,7 @@
         </thead>
         <tbody>
             <?php foreach ($tasksToDo as $task) : ?>
-                <tr>
+                <tr class="task_row">
                     <td>
                         <form method="POST" action="Task/update">
                             <input type="hidden" name="checked" value="false">

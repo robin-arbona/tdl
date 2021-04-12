@@ -1,4 +1,4 @@
-<form class="task_add is-flex is-flex-direction-column" action="Task/add" method="post">
+<form class="task_add is-flex is-flex-direction-column" action="Task/update" method="post">
 
     <h3 class="title">Add form</h3>
     <div class="field">
@@ -9,14 +9,11 @@
 
     <div class="field">
         <p class="control">
-            <input type="text" name="name" placeholder="Task name">
-        </p>
-    </div>
-
-    <div class="field">
-        <p class="control">
             <select name="owner_id" placeholder="who's job">
                 <option value="<?= $user->id ?>">Me</option>
+                <?php foreach ($user->getOnWhoPrivilegeList() as $user) : ?>
+                    <option value="<?= $user->id ?>"><?= $user->login ?></option>
+                <?php endforeach ?>
             </select>
         </p>
     </div>

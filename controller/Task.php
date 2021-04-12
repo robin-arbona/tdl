@@ -54,6 +54,17 @@ class Task extends Controller
         return $this->renderHtml(compact('user'), 'component/task_add_form.php', $buffer);
     }
 
+    public function updateForm($buffer = false)
+    {
+        $user = $this->checkUserSession();
+
+        $this->checkPostRequest();
+
+        $task = $this->model->getBy('id', $_POST['id'], 'Task');
+
+        return $this->renderHtml(compact('user', 'task'), 'component/task_update_form.php', $buffer);
+    }
+
     public function add()
     {
         $user = $this->checkUserSession();
@@ -64,7 +75,6 @@ class Task extends Controller
 
         $this->bddRequestAndRenderJson($this->model->add($_POST, 'Task'), 'Task successfully added');
     }
-
 
     public function update($param)
     {
@@ -84,17 +94,15 @@ class Task extends Controller
                 $this->renderJson(['msg' => implode(" ", $errors)], 200);
             }
         }
+
+        $_POST["done"] = isset($_POST["done"]) ? 1 : 0;
+
+        $this->bddRequestAndRenderJson($this->model->update($_POST, 'Task'), 'Task successfully updated');
     }
 
-    public function remove()
+    public function remove($param)
     {
-    }
-
-    public function checkUserSession()
-    {
-        if (!isset($_SESSION['user'])) {
-            $this->renderHtml(NULL, 'page/denied.php', false, 403);
-        }
-        return $_SESSION['user'];
+        $id = (int) $param;
+        $this->bddRequestAndRenderJson($this->model->remove('id', $id, 'Task'), 'Task successfully removed');
     }
 }

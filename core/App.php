@@ -19,7 +19,10 @@ class App
     private function autoload()
     {
         spl_autoload_register(function ($className) {
-            require(str_replace('\\', '/', $className) . '.php');
+            $filePath = str_replace('\\', '/', $className) . '.php';
+            if (file_exists($filePath)) {
+                require(str_replace('\\', '/', $className) . '.php');
+            }
         });
     }
 

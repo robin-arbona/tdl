@@ -4,5 +4,9 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ [QSA,L,R=307]
 
+#RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+#RewriteRule ^(.*)$ - [E=BASE:%1]
+#RewriteCond %{REQUEST_FILENAME} !-f 
+#RewriteRule . %{ENV:BASE}/index.php [QSA,L,R=307]
 
 

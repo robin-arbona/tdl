@@ -48,17 +48,26 @@ class Model
         return $this->prepare($SQL, $data);
     }
 
+    public function search(string $keyword, string $tableField, $table = NULL)
+    {
+        $data = ["keyword" => $keyword];
+        $table = $table != NULL ? $table : $this->table;
+        $SQL = "SELECT * FROM $table WHERE LOCATE( ?, $tableField)";
+        return $this->preFetchAll($SQL, $data);
+    }
+
     public function prepare(string $SQL, array $data)
     {
         $sth = $this->db->prepare($SQL);
         return $sth->execute(array_values($data));
     }
 
-    public function preFetch(string $SQL, array $data)
+    public function preFetch(string $SQL, array $data, $table = Null)
     {
         $sth = $this->db->prepare($SQL);
         if ($sth->execute(array_values($data))) {
-            $sth->setFetchMode(PDO::FETCH_CLASS, Entity::class);
+            $className = class_exists('entity\\' . $table . 'Entity') ? 'entity\\' . $table . 'Entity' : 'core\Entity';
+            $sth->setFetchMode(PDO::FETCH_CLASS, $className);
             return $sth->fetch();
         } else {
             return false;
@@ -79,21 +88,35 @@ class Model
         } elseif (!empty($filter) && (count($filter) != 1)) {
             return false;
         }
-        return $this->preFetchAll($SQL, $filter);
+        return $this->preFetchAll($SQL, $filter, $table);
     }
 
     public function getBy($key, $value, $table = NULL)
     {
         $table = $table != NULL ? $table : $this->table;
         $SQL = "SELECT * FROM $table WHERE $key = ?";
-        return $this->preFetch($SQL, [$value]);
+        return $this->preFetch($SQL, [$value], $table);
     }
 
-    public function preFetchAll(string $SQL, array $data)
+    public function execute($SQL, $data)
+    {
+        $sth = $this->db->prepare($SQL);
+        return $sth->execute(array_values($data));
+    }
+
+    public function remove($key, $value, $table = NULL)
+    {
+        $table = $table != NULL ? $table : $this->table;
+        $SQL = "DELETE FROM $table WHERE $key = ?";
+        return $this->execute($SQL, [$value], $table);
+    }
+
+    public function preFetchAll(string $SQL, array $data, $table = NULL)
     {
         $sth = $this->db->prepare($SQL);
         if ($sth->execute(array_values($data))) {
-            $sth->setFetchMode(PDO::FETCH_CLASS, Entity::class);
+            $className = class_exists('entity\\' . $table . 'Entity') ? 'entity\\' . $table . 'Entity' : 'core\Entity';
+            $sth->setFetchMode(PDO::FETCH_CLASS, $className);
             return $sth->fetchAll();
         } else {
             return false;

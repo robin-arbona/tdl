@@ -1,5 +1,6 @@
 <section class="section">
     <div class="container">
+        <div class="server_msg block"></div>
         <div class="columns">
             <div class="column is-three-quarters is-flex is-flex-direction-column is-align-items-center">
                 <div class="task_todo box block"><?= $component__task_todo_list ?></div>
@@ -9,12 +10,11 @@
                 <div class="task_done box block"><?= $component__task_done_list ?></div>
             </div>
         </div>
-        <div class="server_msg block"></div>
     </div>
     <div class="modal is-clipped">
         <div class="modal-background"></div>
-        <div class="modal-content" style="border:solid">
-            <div class="box"><?= $component__task_add_form ?></div>
+        <div class="modal-content box" style="border:solid">
+            <?= $component__task_add_form ?>
         </div>
     </div>
 

@@ -7,7 +7,7 @@
     </thead>
     <tbody>
         <?php foreach ($tasksDone as $task) : ?>
-            <tr>
+            <tr class='task_row'>
                 <td>
                     <form method="POST" action="Task/update">
                         <input type="hidden" name="checked" value="true">
