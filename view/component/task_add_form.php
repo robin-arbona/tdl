@@ -29,7 +29,7 @@
     </div>
 
     <div class="field">
-        <label class="label">End name</label>
+        <label class="label">End date</label>
 
         <p class="control">
             <input type="datetime-local" name="end_date" placeholder="End date">
