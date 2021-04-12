@@ -1,5 +1,5 @@
     <h3 class="title">Log-in</h3>
-    <p class="subtitle">Start efficient <strong>plannficiation</strong> now!</p>
+    <p class="subtitle">Start efficient <strong>plannification</strong> now!</p>
     <div class="columns">
         <form class="column is-half is-offset-one-quarter" action="user/inscription" method="post">
             <div class="field">
